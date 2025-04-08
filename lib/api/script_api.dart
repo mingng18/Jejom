@@ -1,4 +1,3 @@
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:jejom/models/language_enum.dart';
@@ -7,6 +6,7 @@ import 'package:jejom/models/script_restaurant.dart';
 import 'package:jejom/utils/constants/constants.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'dart:async';
 
 // Fetch all scripts along with their nested collections (eng and kor)
 Future<List<ScriptGame>> fetchAllScriptFromFirestore(Language lang) async {
@@ -19,12 +19,13 @@ Future<List<ScriptGame>> fetchAllScriptFromFirestore(Language lang) async {
 
     if (scriptDocs.docs.isNotEmpty) {
       for (var scriptDoc in scriptDocs.docs) {
-        // print(scriptDoc.data());
-        final nestedCollection = lang == Language.english ? 'eng' : 'kor';
+        print(scriptDoc.data());
+        final nestedCollection = lang == Language.english ? 'eng' : 'chi';
         final nestedDocs =
             await scriptDoc.reference.collection(nestedCollection).get();
 
         if (nestedDocs.docs.isNotEmpty) {
+          print("nestedDocs: ${nestedDocs.docs[0].data()}");
           Map<String, dynamic> fullData = {
             ...scriptDoc.data(),
             ...nestedDocs.docs[0].data(),
@@ -53,7 +54,7 @@ Future<List<ScriptGame>> fetchResScriptFromFirestore(
 
         // Check if the restaurants array contains the given resId
         if (restaurant == resId) {
-          final nestedCollection = lang == Language.english ? 'eng' : 'kor';
+          final nestedCollection = lang == Language.english ? 'eng' : 'chi';
           final nestedDocs =
               await scriptDoc.reference.collection(nestedCollection).get();
 
@@ -104,40 +105,79 @@ void printWrapped(String text) {
 
 Future<void> generateScript(String restaurantId, int charactersNum,
     String cafeName, String cafeEnv) async {
+  const int maxRetries = 3;
+  const Duration timeoutDuration = Duration(seconds: 30);
+  const Duration retryDelay = Duration(seconds: 2);
+
   var url = Uri.parse('http://${Constants.API_URL}/generate_script');
 
   var body = {
     'characters_num': charactersNum.toString(),
     'cafe_name': cafeName,
     'cafe_environment': cafeEnv,
-    'mode': ''
+    'mode': 'test'
   };
 
-  print("Sent Script Generator");
-  var response = await http.post(
-    url,
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded',
-    },
-    body: body,
-  );
+  for (int attempt = 0; attempt < maxRetries; attempt++) {
+    try {
+      print("Attempt ${attempt + 1} of $maxRetries to generate script");
 
-  print("Responsed");
+      var client = http.Client();
+      var response = await client
+          .post(
+            url,
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded',
+              'Connection': 'keep-alive',
+            },
+            body: body,
+          )
+          .timeout(timeoutDuration);
 
-  if (response.statusCode == 200) {
-    var responseBody = json.decode(response.body);
+      print("Response received with status: ${response.statusCode}");
 
-    var engScript = responseBody['eng_script'];
-    var korScript = responseBody['kor_script'];
+      if (response.statusCode == 200) {
+        var responseBody = json.decode(response.body);
 
-    print('Eng Script: $engScript');
-    print('Kor Script: $korScript');
+        var engScript = responseBody['eng_script'];
+        var cnScript = responseBody['cn_script'];
 
-    await uploadScriptToFirestore(restaurantId, korScript, engScript);
+        print('Eng Script: $engScript');
+        print('Chi Script: $cnScript');
 
-    print('Scripts and ScriptGame saved successfully to Firestore.');
-  } else {
-    print('Request failed with status: ${response.statusCode}.');
+        await uploadScriptToFirestore(restaurantId, cnScript, engScript);
+
+        print('Scripts and ScriptGame saved successfully to Firestore.');
+        return;
+      } else if (response.statusCode >= 500) {
+        // Server error, retry
+        if (attempt < maxRetries - 1) {
+          print('Server error (${response.statusCode}), retrying...');
+          await Future.delayed(retryDelay);
+          continue;
+        }
+      }
+
+      print('Request failed with status: ${response.statusCode}.');
+      throw Exception('Failed to generate script: ${response.statusCode}');
+    } on TimeoutException {
+      print('Request timed out, retrying...');
+      if (attempt < maxRetries - 1) {
+        await Future.delayed(retryDelay);
+        continue;
+      }
+      throw Exception('Request timed out after $maxRetries attempts');
+    } on http.ClientException catch (e) {
+      print('Connection error: $e');
+      if (attempt < maxRetries - 1) {
+        await Future.delayed(retryDelay);
+        continue;
+      }
+      throw Exception('Connection error after $maxRetries attempts: $e');
+    } catch (e) {
+      print('Error during script generation: $e');
+      rethrow;
+    }
   }
 }
 
@@ -152,7 +192,7 @@ Future<void> uploadScriptToFirestore(String restaurantId,
     });
 
     await docRef
-        .collection('kor')
+        .collection('chi')
         .doc()
         .set({...korScript, 'restaurant': restaurantId});
     await docRef

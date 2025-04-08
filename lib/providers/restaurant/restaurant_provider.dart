@@ -6,10 +6,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 class RestaurantProvider extends ChangeNotifier {
   ScriptRestaurant? _restaurant;
 
-  // RestaurantProvider() {
-  //   fetchRestaurant();
-  // }
-
   ScriptRestaurant? get restaurant => _restaurant;
 
   void setRestaurant(ScriptRestaurant? restaurant) {
@@ -25,6 +21,8 @@ class RestaurantProvider extends ChangeNotifier {
       print('User ID not found in SharedPreferences');
       return;
     }
+
+    print("restaurantID: $userId");
 
     // Fetch restaurant from Firestore
     try {

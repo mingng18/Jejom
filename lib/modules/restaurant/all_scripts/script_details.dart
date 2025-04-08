@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:jejom/models/language_enum.dart';
+import 'package:jejom/models/script_game.dart';
 import 'package:jejom/providers/restaurant/script_restaurant_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -117,6 +118,7 @@ class _ScriptDetailsPageState extends State<ScriptDetailsPage> {
               children: [
                 _buildScriptTab(scriptGameProvider),
                 _buildCharacterTab(scriptGameProvider),
+                _buildHostTab(scriptGameProvider),
                 _buildAddTab(scriptGameProvider),
                 _buildClueTab(scriptGameProvider),
                 _buildPlayerTab(scriptGameProvider),
@@ -215,14 +217,14 @@ class _ScriptDetailsPageState extends State<ScriptDetailsPage> {
                                     GestureDetector(
                                       onTap: () {
                                         scriptGameProvider
-                                            .updateLanguage(Language.korean);
+                                            .updateLanguage(Language.chinese);
                                       },
                                       child: Container(
                                         padding: const EdgeInsets.symmetric(
                                             horizontal: 16, vertical: 8),
                                         decoration: BoxDecoration(
                                           color: scriptGameProvider.lang ==
-                                                  Language.korean
+                                                  Language.chinese
                                               ? Colors.black
                                               : Colors.transparent,
                                           borderRadius:
@@ -231,15 +233,15 @@ class _ScriptDetailsPageState extends State<ScriptDetailsPage> {
                                         child: Row(
                                           children: [
                                             if (scriptGameProvider.lang ==
-                                                Language.korean)
+                                                Language.chinese)
                                               const Icon(Icons.check,
                                                   size: 14,
                                                   color: Colors.white),
                                             if (scriptGameProvider.lang ==
-                                                Language.korean)
+                                                Language.chinese)
                                               const SizedBox(width: 4),
                                             const Text(
-                                              "Kor",
+                                              "Chi",
                                               style: TextStyle(
                                                 color: Colors.white,
                                                 fontSize: 13,
@@ -299,7 +301,7 @@ class _ScriptDetailsPageState extends State<ScriptDetailsPage> {
                                           ),
                                           const SizedBox(height: 6),
                                           Text(
-                                            "Duration: ${scriptGameProvider.selectedGame?.duration ?? ""}",
+                                            "${scriptGameProvider.selectedGame?.duration ?? ""}",
                                             style: const TextStyle(
                                               fontSize: 14,
                                               color: Colors.black87,
@@ -343,11 +345,13 @@ class _ScriptDetailsPageState extends State<ScriptDetailsPage> {
                             Icons.menu_book_outlined, "Story"),
                         _buildNavItem(1, Icons.person, Icons.person_outlined,
                             "Character"),
-                        _buildNavItem(2, Icons.theater_comedy,
+                        _buildNavItem(2, Icons.support_agent,
+                            Icons.support_agent_outlined, "Host"),
+                        _buildNavItem(3, Icons.theater_comedy,
                             Icons.theater_comedy_outlined, "Script"),
-                        _buildNavItem(
-                            3, Icons.search, Icons.search_outlined, "Clues"),
-                        _buildNavItem(4, Icons.people_alt,
+                        _buildNavItem(4, Icons.search, Icons.search_outlined,
+                            "Clues"),
+                        _buildNavItem(5, Icons.people_alt,
                             Icons.people_alt_outlined, "Players"),
                       ],
                     ),
@@ -414,31 +418,197 @@ class _ScriptDetailsPageState extends State<ScriptDetailsPage> {
                 color: Colors.white.withOpacity(0.2),
                 width: 1,
               ),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.1),
+                  blurRadius: 10,
+                  spreadRadius: 2,
+                ),
+              ],
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  title,
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black87,
-                  ),
+                Row(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: Colors.blue.withOpacity(0.2),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Icon(
+                        _getIconForTitle(title),
+                        color: Colors.blue[700],
+                        size: 20,
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Text(
+                        title,
+                        style: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black87,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
                 const SizedBox(height: 16),
-                Text(
-                  content.replaceAll(r'\n', '\n'),
-                  style: const TextStyle(
-                    fontSize: 16,
-                    color: Colors.black87,
-                    height: 1.5,
+                Container(
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(
+                      color: Colors.white.withOpacity(0.1),
+                      width: 1,
+                    ),
+                  ),
+                  child: Text(
+                    content.replaceAll(r'\n', '\n'),
+                    style: const TextStyle(
+                      fontSize: 16,
+                      color: Colors.black87,
+                      height: 1.5,
+                    ),
                   ),
                 ),
               ],
             ),
           ),
         ),
+      ),
+    );
+  }
+
+  IconData _getIconForTitle(String title) {
+    switch (title.toLowerCase()) {
+      case 'voting guide':
+        return Icons.how_to_vote;
+      case 'character allocation guide':
+        return Icons.people;
+      case 'introduction guide':
+        return Icons.mic;
+      case 'clues guide':
+        return Icons.search;
+      case 'tips guide':
+        return Icons.lightbulb;
+      case 'discussion guide':
+        return Icons.forum;
+      case 'flow guide':
+        return Icons.timeline;
+      case 'character designer':
+        return Icons.person;
+      default:
+        return Icons.description;
+    }
+  }
+
+  Widget _buildCharacterCard(Character character) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(20),
+        child: BackdropFilter(
+          filter: ImageFilter.blur(sigmaX: 5.0, sigmaY: 5.0),
+          child: Container(
+            padding: const EdgeInsets.all(20),
+            decoration: BoxDecoration(
+              color: Colors.white.withOpacity(0.2),
+              borderRadius: BorderRadius.circular(20),
+              border: Border.all(
+                color: Colors.white.withOpacity(0.2),
+                width: 1,
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.1),
+                  blurRadius: 10,
+                  spreadRadius: 2,
+                ),
+              ],
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: Colors.purple.withOpacity(0.2),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: const Icon(
+                        Icons.person,
+                        color: Colors.purple,
+                        size: 20,
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Text(
+                        character.name,
+                        style: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black87,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 16),
+                _buildActCard("Act 1", character.act1),
+                const SizedBox(height: 12),
+                _buildActCard("Act 2", character.act2),
+                const SizedBox(height: 12),
+                _buildActCard("Act 3", character.act3),
+                const SizedBox(height: 12),
+                _buildActCard("Act 4", character.act4),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildActCard(String actTitle, String content) {
+    return Container(
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: Colors.white.withOpacity(0.1),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color: Colors.white.withOpacity(0.1),
+          width: 1,
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            actTitle,
+            style: const TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.bold,
+              color: Colors.black87,
+            ),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            content,
+            style: const TextStyle(
+              fontSize: 14,
+              color: Colors.black87,
+              height: 1.5,
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -456,7 +626,7 @@ class _ScriptDetailsPageState extends State<ScriptDetailsPage> {
 
     final List<String> scriptSections =
         selectedGame.scriptPlanner.split("<image>");
-    final List<String> images = selectedGame.images;
+    // final List<String> images = selectedGame.images;
 
     return SingleChildScrollView(
       physics: const BouncingScrollPhysics(),
@@ -477,7 +647,7 @@ class _ScriptDetailsPageState extends State<ScriptDetailsPage> {
               ),
             ),
             const SizedBox(height: 8),
-            ..._buildScriptWithImages(scriptSections, images),
+            ..._buildScriptWithImages(scriptSections, []),
             const SizedBox(height: 80), // Reduced padding for bottom
           ],
         ),
@@ -550,14 +720,14 @@ class _ScriptDetailsPageState extends State<ScriptDetailsPage> {
     return SingleChildScrollView(
       physics: const BouncingScrollPhysics(),
       child: Padding(
-        padding: const EdgeInsets.only(top: 200), // Reduced paFdding for header
+        padding: const EdgeInsets.only(top: 200),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Padding(
               padding: EdgeInsets.fromLTRB(20, 20, 20, 0),
               child: Text(
-                "Character Designer",
+                "Characters",
                 style: TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
@@ -566,10 +736,82 @@ class _ScriptDetailsPageState extends State<ScriptDetailsPage> {
               ),
             ),
             _buildContentCard(
-              "Character Details",
+              "Character Designer",
               scriptGameProvider.selectedGame!.characterDesigner,
             ),
-            const SizedBox(height: 80), // Reduced padding for bottom
+            const SizedBox(height: 16),
+            ...scriptGameProvider.selectedGame!.characters.map((character) => 
+              _buildCharacterCard(character),
+            ),
+            const SizedBox(height: 80),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildHostTab(ScriptRestaurantProvider scriptGameProvider) {
+    if (scriptGameProvider.games.isEmpty) {
+      return const Center(child: Text('No games available.'));
+    }
+
+    if (scriptGameProvider.selectedGame == null) {
+      return const Center(child: Text('No game selected.'));
+    }
+
+    return SingleChildScrollView(
+      physics: const BouncingScrollPhysics(),
+      child: Padding(
+        padding: const EdgeInsets.only(top: 200),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Padding(
+              padding: EdgeInsets.fromLTRB(20, 20, 20, 0),
+              child: Text(
+                "Host Guides",
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black87,
+                ),
+              ),
+            ),
+            _buildContentCard(
+              "Voting Guide",
+              scriptGameProvider.selectedGame!.host.hostGuideVoting,
+            ),
+            const SizedBox(height: 16),
+            _buildContentCard(
+              "Character Allocation Guide",
+              scriptGameProvider.selectedGame!.host.hostGuideCharacterAllocation,
+            ),
+            const SizedBox(height: 16),
+            _buildContentCard(
+              "Introduction Guide",
+              scriptGameProvider.selectedGame!.host.hostGuideIntro,
+            ),
+            const SizedBox(height: 16),
+            _buildContentCard(
+              "Clues Guide",
+              scriptGameProvider.selectedGame!.host.hostGuideClues,
+            ),
+            const SizedBox(height: 16),
+            _buildContentCard(
+              "Tips Guide",
+              scriptGameProvider.selectedGame!.host.hostGuideTips,
+            ),
+            const SizedBox(height: 16),
+            _buildContentCard(
+              "Discussion Guide",
+              scriptGameProvider.selectedGame!.host.hostGuideDiscussion,
+            ),
+            const SizedBox(height: 16),
+            _buildContentCard(
+              "Flow Guide",
+              scriptGameProvider.selectedGame!.host.hostGuideFlow,
+            ),
+            const SizedBox(height: 80),
           ],
         ),
       ),
@@ -667,4 +909,4 @@ class _ScriptDetailsPageState extends State<ScriptDetailsPage> {
   }
 }
 
-enum _SelectedTab { storyline, character, add, clue, player }
+enum _SelectedTab { storyline, character, host, add, clue, player }

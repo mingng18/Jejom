@@ -14,7 +14,7 @@ class _TravelWrapperState extends State<TravelWrapper> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        padding: const EdgeInsets.symmetric(horizontal: 0.0),
         child: Stack(
           children: [
             Opacity(

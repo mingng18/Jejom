@@ -37,7 +37,10 @@ class Trip {
           ? List<Accommodation>.from(
               json['accomodations'].map((x) => Accommodation.fromJson(x)))
           : [],
-      flight: FlightInfo.fromJson(json['flightInfo']),
+      flight: json['flightInfo'] != null
+          ? FlightInfo.fromJson(json['flightInfo'])
+          : FlightInfo(
+              departureFlight: null, priceTotal: 0, returnFlight: null),
       thumbnail: json['thumbnail'] ?? '',
     );
   }

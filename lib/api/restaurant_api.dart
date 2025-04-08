@@ -37,3 +37,18 @@ Future<ScriptRestaurant?> fetchRestaurantFromFirestore(String userId) async {
     return null;
   }
 }
+
+Future<List<ScriptRestaurant>?> fetchScriptRestaurantFromFirestore(
+    String userId) async {
+  final restaurantDoc =
+      await FirebaseFirestore.instance.collection('script_restaurant').get();
+  if (restaurantDoc.docs.isEmpty) {
+    return null;
+  }
+
+  final List<ScriptRestaurant> scriptRestaurants = restaurantDoc.docs
+      .map((doc) => ScriptRestaurant.fromJson(doc.data()))
+      .toList();
+
+  return scriptRestaurants.where((restaurant) => restaurant == userId).toList();
+}

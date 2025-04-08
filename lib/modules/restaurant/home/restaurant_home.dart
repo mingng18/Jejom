@@ -4,6 +4,7 @@ import 'package:jejom/modules/restaurant/script_generator/prompt_details.dart';
 import 'package:jejom/providers/restaurant/restaurant_provider.dart';
 import 'package:jejom/providers/restaurant/script_generator_provider.dart';
 import 'package:provider/provider.dart';
+// import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:ui';
 
 class RestaurantHome extends StatefulWidget {
@@ -14,15 +15,20 @@ class RestaurantHome extends StatefulWidget {
 }
 
 class _RestaurantHomeState extends State<RestaurantHome> {
-  late RestaurantProvider restaurantProvider;
+  late RestaurantProvider restaurantProvider =
+      Provider.of<RestaurantProvider>(context, listen: false);
 
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    restaurantProvider =
-        Provider.of<RestaurantProvider>(context, listen: false);
-    // restaurantProvider.fetchRestaurant();
+  void initState() {
+    super.initState();
+    restaurantProvider.fetchRestaurant();
+    // _loadUserId();
   }
+
+  // Future<void> _loadUserId() async {
+  //   final prefs = await SharedPreferences.getInstance();
+  //   await prefs.setString('userId', "27124a53-368f-434a-b3bc-38435524c7b9");
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +51,7 @@ class _RestaurantHomeState extends State<RestaurantHome> {
               ),
             ),
           ),
-          
+
           // Abstract design elements
           Positioned(
             top: -100,
@@ -59,7 +65,7 @@ class _RestaurantHomeState extends State<RestaurantHome> {
               ),
             ),
           ),
-          
+
           Positioned(
             bottom: -50,
             left: -50,
@@ -72,7 +78,7 @@ class _RestaurantHomeState extends State<RestaurantHome> {
               ),
             ),
           ),
-          
+
           SafeArea(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -80,7 +86,7 @@ class _RestaurantHomeState extends State<RestaurantHome> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   SizedBox(height: 40),
-                  
+
                   // Main card
                   ClipRRect(
                     borderRadius: BorderRadius.circular(20),
@@ -110,7 +116,8 @@ class _RestaurantHomeState extends State<RestaurantHome> {
                             SizedBox(height: 10),
                             Row(
                               children: [
-                                Icon(Icons.theater_comedy, color: Colors.black87),
+                                Icon(Icons.theater_comedy,
+                                    color: Colors.black87),
                                 SizedBox(width: 10),
                                 Text(
                                   "Create Your Game",
@@ -132,16 +139,19 @@ class _RestaurantHomeState extends State<RestaurantHome> {
                                   decoration: InputDecoration(
                                     hintText: "Describe your mystery...",
                                     hintStyle: TextStyle(color: Colors.black54),
-                                    contentPadding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+                                    contentPadding: EdgeInsets.symmetric(
+                                        horizontal: 15, vertical: 15),
                                     border: InputBorder.none,
                                   ),
                                   style: TextStyle(color: Colors.black87),
                                   textInputAction: TextInputAction.send,
-                                  onChanged: (value) => scriptProvider.updatePrompt(value),
+                                  onChanged: (value) =>
+                                      scriptProvider.updatePrompt(value),
                                   onSubmitted: (value) {
                                     Navigator.of(context).push(
                                       MaterialPageRoute(
-                                        builder: (context) => const PromptDetails(),
+                                        builder: (context) =>
+                                            const PromptDetails(),
                                       ),
                                     );
                                   },
@@ -156,7 +166,8 @@ class _RestaurantHomeState extends State<RestaurantHome> {
                                   onPressed: () {
                                     Navigator.of(context).push(
                                       MaterialPageRoute(
-                                        builder: (context) => const PromptDetails(),
+                                        builder: (context) =>
+                                            const PromptDetails(),
                                       ),
                                     );
                                   },
@@ -166,7 +177,8 @@ class _RestaurantHomeState extends State<RestaurantHome> {
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(20),
                                     ),
-                                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 20, vertical: 10),
                                   ),
                                   child: Text("Create Script"),
                                 ),
@@ -177,32 +189,32 @@ class _RestaurantHomeState extends State<RestaurantHome> {
                       ),
                     ),
                   ),
-                  
+
                   SizedBox(height: 20),
-                  
+
                   // Navigation tabs
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      buildNavTab(isSelected: true, icon: Icons.edit, label: "Create"),
+                      buildNavTab(
+                          isSelected: true, icon: Icons.edit, label: "Create"),
                       SizedBox(width: 30),
                       buildNavTab(
-                        isSelected: false, 
-                        icon: Icons.explore, 
-                        label: "Scripts",
-                        onTap: () {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) => const ResScripts(),
-                            ),
-                          );
-                        }
-                      ),
+                          isSelected: false,
+                          icon: Icons.explore,
+                          label: "Scripts",
+                          onTap: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => const ResScripts(),
+                              ),
+                            );
+                          }),
                     ],
                   ),
-                  
+
                   Spacer(),
-                  
+
                   // Bottom padding
                   SizedBox(height: 20),
                 ],
@@ -213,10 +225,10 @@ class _RestaurantHomeState extends State<RestaurantHome> {
       ),
     );
   }
-  
+
   Widget buildNavTab({
-    required bool isSelected, 
-    required IconData icon, 
+    required bool isSelected,
+    required IconData icon,
     required String label,
     VoidCallback? onTap,
   }) {
@@ -232,7 +244,7 @@ class _RestaurantHomeState extends State<RestaurantHome> {
               shape: BoxShape.circle,
             ),
             child: Icon(
-              icon, 
+              icon,
               color: isSelected ? Colors.white : Colors.black54,
               size: 24,
             ),

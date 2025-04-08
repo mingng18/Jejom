@@ -19,55 +19,64 @@ class _TravelDetailsState extends State<TravelDetails> {
 
     return travelProvider.isLoading
         ? const Center(child: LoadingWidget())
-        : SingleChildScrollView(
-            child:
-                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              const SizedBox(height: 80),
-              IconButton(
-                  visualDensity: VisualDensity.adaptivePlatformDensity,
-                  onPressed: () => Navigator.of(context).pop(),
-                  icon: const Icon(
-                    Icons.arrow_back,
-                    // size: 24,
-                  )),
-              const SizedBox(height: 16),
-              // travelProvider.isDestination
-              //     ? _buildDestination(travelProvider)
-              //     : const SizedBox(),
-              travelProvider.isDuration
-                  ? _buildDuration(travelProvider)
-                  : const SizedBox(),
-              travelProvider.isBudget
-                  ? _buildBudget(travelProvider)
-                  : const SizedBox(),
-              travelProvider.isNumberPerson
-                  ? _buildNumberPerson(travelProvider)
-                  : const SizedBox(),
-              Row(
-                children: [
-                  const Spacer(),
-                  FilledButton(
-                    style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all(
-                          Theme.of(context).colorScheme.primaryContainer),
-                      visualDensity: VisualDensity.adaptivePlatformDensity,
-                      padding: MaterialStateProperty.all(
-                        const EdgeInsets.symmetric(
-                            horizontal: 32, vertical: 16),
-                      ),
+        : Padding(
+            padding: const EdgeInsets.all(24),
+            child: SingleChildScrollView(
+              child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(height: 80),
+                    IconButton(
+                        visualDensity: VisualDensity.adaptivePlatformDensity,
+                        onPressed: () => Navigator.of(context).pop(),
+                        icon: const Icon(
+                          Icons.arrow_back,
+                          // size: 24,
+                        )),
+                    const SizedBox(height: 16),
+                    // travelProvider.isDestination
+                    //     ? _buildDestination(travelProvider)
+                    //     : const SizedBox(),
+                    travelProvider.isDuration
+                        ? _buildDuration(travelProvider)
+                        : const SizedBox(),
+                    travelProvider.isBudget
+                        ? _buildBudget(travelProvider)
+                        : const SizedBox(),
+                    travelProvider.isNumberPerson
+                        ? _buildNumberPerson(travelProvider)
+                        : const SizedBox(),
+                    Row(
+                      children: [
+                        const Spacer(),
+                        FilledButton(
+                          style: ButtonStyle(
+                            backgroundColor: MaterialStateProperty.all(
+                                Theme.of(context).colorScheme.primaryContainer),
+                            visualDensity:
+                                VisualDensity.adaptivePlatformDensity,
+                            padding: MaterialStateProperty.all(
+                              const EdgeInsets.symmetric(
+                                  horizontal: 32, vertical: 16),
+                            ),
+                          ),
+                          onPressed: () =>
+                              travelProvider.sendTravelDetails(context),
+                          child: Text("I'm in!",
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyLarge
+                                  ?.copyWith(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onPrimaryContainer,
+                                  )),
+                        ),
+                      ],
                     ),
-                    onPressed: () => travelProvider.sendTravelDetails(context),
-                    child: Text("I'm in!",
-                        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .onPrimaryContainer,
-                            )),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 32),
-            ]),
+                    const SizedBox(height: 32),
+                  ]),
+            ),
           );
   }
 

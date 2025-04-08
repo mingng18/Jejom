@@ -44,15 +44,21 @@ class Destination {
       address: json['Address'] ?? 'Unknown',
       description: json['Description'] ?? 'No description available',
       googlePlaceID: json['GooglePlaceID'] ?? 'Unknown',
-      latitude: double.tryParse(json['Latitude']?.toString() ?? '') ?? 0.0,
-      longitude: double.tryParse(json['Longitude']?.toString() ?? '') ?? 0.0,
+      latitude: json['Latitude'] ?? 0.0,
+      longitude: json['Longitude'] ?? 0.0,
       name: json['Name'] ?? 'Unknown',
       numRating: json['NumRating'] ?? 0,
       openingHours: json['OpeningHours'] != null
-          ? List<String>.from(json['OpeningHours'].map((x) => x))
+          ? List<String>.from(json['OpeningHours']
+              .map((x) => x ?? '')
+              .where((x) => x != null)
+              .toList())
           : [],
       photos: json['Photos'] != null
-          ? List<String>.from(json['Photos'].map((x) => (x)))
+          ? List<String>.from(json['Photos']
+              .map((x) => x ?? '')
+              .where((x) => x != null)
+              .toList())
           : [],
       price: json['Price'] ?? 'Unknown',
       rating: json['Rating'] ?? 'Unknown',

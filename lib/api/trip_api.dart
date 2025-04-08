@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/services.dart';
@@ -6,6 +7,10 @@ import 'package:jejom/utils/constants/constants.dart';
 import 'package:http/http.dart' as http;
 
 class TripApi {
+  static const int maxRetries = 3;
+  static const Duration retryDelay = Duration(seconds: 2);
+  static const Duration timeoutDuration = Duration(minutes: 10);
+
   checkInitInput(String prompt) async {
     var url = Uri.parse('http://${Constants.API_URL}/check_init_input');
 
@@ -30,31 +35,61 @@ class TripApi {
     }
   }
 
-  generateTrip(String query, String userProps) async {
+  Future<dynamic> generateTrip(String query, String userProps) async {
     var url = Uri.parse('http://${Constants.API_URL}/generate_trip');
-
     var body = {
       'query': query,
       "user_props": userProps,
-      // "mode": "test",
     };
 
-    var response = await http.post(
-      url,
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-        'Connection': 'keep-alive', // Keep connection alive
-      },
-      body: body,
-    );
+    for (int attempt = 0; attempt < maxRetries; attempt++) {
+      try {
+        var client = http.Client();
+        var response = await client.post(
+          url,
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'Connection': 'keep-alive',
+            'Accept': 'application/json',
+          },
+          body: body,
+        ).timeout(timeoutDuration);
 
-    if (response.statusCode == 200) {
-      var responseBody = json.decode(response.body);
-      print('Trip Response: ${responseBody['data']}');
-      return responseBody['data'];
-    } else {
-      print('Request failed with status: ${response.statusCode}.');
+        if (response.statusCode == 200) {
+          var responseBody = json.decode(response.body);
+          print('Trip Response: ${responseBody['data']}');
+          return responseBody['data'];
+        } else if (response.statusCode >= 500) {
+          // Server error, retry
+          if (attempt < maxRetries - 1) {
+            print('Server error (${response.statusCode}), retrying...');
+            await Future.delayed(retryDelay);
+            continue;
+          }
+        }
+        
+        print('Request failed with status: ${response.statusCode}.');
+        return null;
+      } on TimeoutException {
+        print('Request timed out, retrying...');
+        if (attempt < maxRetries - 1) {
+          await Future.delayed(retryDelay);
+          continue;
+        }
+        rethrow;
+      } on http.ClientException catch (e) {
+        print('Connection error: $e');
+        if (attempt < maxRetries - 1) {
+          await Future.delayed(retryDelay);
+          continue;
+        }
+        rethrow;
+      } catch (e) {
+        print('Error during API request: $e');
+        rethrow;
+      }
     }
+    return null;
   }
 
   Future<void> addTripToFirebase(

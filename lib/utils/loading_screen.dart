@@ -10,7 +10,8 @@ class LoadingWidget extends StatelessWidget {
     final size = MediaQuery.of(context).size;
 
     return Scaffold(
-      backgroundColor: Colors.grey[200],
+      // backgroundColor: Colors.grey[200],
+      
       body: Stack(
         children: [
           // Background gradient

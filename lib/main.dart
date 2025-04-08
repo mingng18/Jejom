@@ -72,12 +72,14 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => AccommodationProvider()),
         ChangeNotifierProvider(create: (context) => UserProvider()),
         ChangeNotifierProvider(create: (context) => TravelProvider()),
-        ChangeNotifierProvider(create: (context) => RestaurantProvider()),
+        ChangeNotifierProvider(
+            create: (context) => RestaurantProvider()..fetchRestaurant()),
         ChangeNotifierProvider(
           create: (context) => RestaurantScriptGeneratorProvider(),
         ),
         ChangeNotifierProvider(
-          create: (context) => ScriptRestaurantProvider(),
+          create: (context) =>
+              ScriptRestaurantProvider()..fetchGames(Language.english, userId),
         ),
         ChangeNotifierProvider(
           create: (context) => RestaurantOnboardingProvider(),
@@ -120,5 +122,6 @@ Future<bool> isUserOnBoarded() async {
 
 Future<bool> isRestaurantCheck() async {
   final prefs = await SharedPreferences.getInstance();
+  print("isRestaurantCheck: ${prefs.getBool('isRestaurant')}");
   return prefs.getBool('isRestaurant') ?? false;
 }

@@ -100,13 +100,13 @@ class _FlightsSectionState extends State<FlightsSection>
                       hasBackground: true,
                     ),
                     const SizedBox(height: AppTheme.paddingMedium),
-                    SectionHeader(
+                    const SectionHeader(
                       title: "Flights",
                       icon: Icons.flight,
                     ),
                     const SizedBox(height: AppTheme.paddingSmall),
                     Text(
-                      "KRW ${trip.flight.priceTotal}",
+                      "NTD ${trip.flight.priceTotal}",
                       style: AppTheme.displayMedium.copyWith(
                         fontWeight: FontWeight.bold,
                         color: AppTheme.travelPrimary,
@@ -299,9 +299,13 @@ class _FlightsSectionState extends State<FlightsSection>
                               ),
                             ),
                             const SizedBox(width: AppTheme.paddingSmall),
-                            Text(
-                              flight.departureAirport?.name ?? 'Unknown Airport',
-                              style: AppTheme.bodyMedium,
+                            Expanded(
+                              child: Text(
+                                flight.departureAirport?.name ?? 'Unknown Airport',
+                                style: AppTheme.bodyMedium,
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 1,
+                              ),
                             ),
                           ],
                         ),
@@ -357,9 +361,13 @@ class _FlightsSectionState extends State<FlightsSection>
                               ),
                             ),
                             const SizedBox(width: AppTheme.paddingSmall),
-                            Text(
-                              flight.arrivalAirport?.name ?? 'Unknown Airport',
-                              style: AppTheme.bodyMedium,
+                            Expanded(
+                              child: Text(
+                                flight.arrivalAirport?.name ?? 'Unknown Airport',
+                                style: AppTheme.bodyMedium,
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 1,
+                              ),
                             ),
                           ],
                         ),

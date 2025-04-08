@@ -156,14 +156,14 @@ class _ScriptGamePageState extends State<ScriptGamePage> {
                               GestureDetector(
                                 onTap: () {
                                   scriptGameProvider
-                                      .updateLanguage(Language.korean);
+                                      .updateLanguage(Language.chinese);
                                 },
                                 child: Container(
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 16, vertical: 8),
                                   decoration: BoxDecoration(
                                     color: scriptGameProvider.lang ==
-                                            Language.korean
+                                            Language.chinese
                                         ? Colors.black
                                         : Colors.transparent,
                                     borderRadius: BorderRadius.circular(25),
@@ -171,14 +171,14 @@ class _ScriptGamePageState extends State<ScriptGamePage> {
                                   child: Row(
                                     children: [
                                       if (scriptGameProvider.lang ==
-                                          Language.korean)
+                                          Language.chinese)
                                         const Icon(Icons.check,
                                             size: 14, color: Colors.white),
                                       if (scriptGameProvider.lang ==
-                                          Language.korean)
+                                          Language.chinese)
                                         const SizedBox(width: 4),
                                       const Text(
-                                        "Kor",
+                                        "Chi",
                                         style: TextStyle(
                                           color: Colors.white,
                                           fontSize: 13,
@@ -213,16 +213,18 @@ class _ScriptGamePageState extends State<ScriptGamePage> {
             left: 0,
             right: 0,
             height: 120,
-            child: Container(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [
-                    Colors.white.withOpacity(0.5),
-                    Colors.white.withOpacity(0.2),
-                    Colors.white.withOpacity(0.0),
-                  ],
+            child: IgnorePointer(
+              child: Container(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [
+                      Colors.white.withOpacity(0.5),
+                      Colors.white.withOpacity(0.2),
+                      Colors.white.withOpacity(0.0),
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -277,44 +279,43 @@ class _ScriptGamePageState extends State<ScriptGamePage> {
                 // Duration header
                 Row(
                   children: [
-                    Container(
-                      padding: const EdgeInsets.all(8),
-                      decoration: BoxDecoration(
-                        color: Colors.blue.withOpacity(0.1),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: const Icon(
-                        Icons.access_time_rounded,
-                        size: 18,
+                    // Container(
+                    //   padding: const EdgeInsets.all(8),
+                    //   decoration: BoxDecoration(
+                    //     color: Colors.blue.withOpacity(0.1),
+                    //     borderRadius: BorderRadius.circular(10),
+                    //   ),
+                    //   child: const Icon(
+                    //     Icons.access_time_rounded,
+                    //     size: 18,
+                    //     color: Colors.blue,
+                    //   ),
+                    // ),
+                    // const SizedBox(width: 4),
+                    Text(
+                      scriptGameProvider.selectedGame?.duration ?? "",
+                      style: const TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
                         color: Colors.blue,
                       ),
                     ),
-                    const SizedBox(width: 12),
-                    const Text(
-                      "Duration",
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black87,
-                      ),
-                    ),
-                    const Spacer(),
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 12, vertical: 6),
-                      decoration: BoxDecoration(
-                        color: Colors.blue.withOpacity(0.1),
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Text(
-                        scriptGameProvider.selectedGame?.duration ?? "",
-                        style: const TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.blue,
-                        ),
-                      ),
-                    ),
+                    // Container(
+                    //   padding: const EdgeInsets.symmetric(
+                    //       horizontal: 12, vertical: 6),
+                    //   decoration: BoxDecoration(
+                    //     color: Colors.blue.withOpacity(0.1),
+                    //     borderRadius: BorderRadius.circular(12),
+                    //   ),
+                    //   child: Text(
+                    //     scriptGameProvider.selectedGame?.duration ?? "",
+                    //     style: const TextStyle(
+                    //       fontSize: 14,
+                    //       fontWeight: FontWeight.w600,
+                    //       color: Colors.blue,
+                    //     ),
+                    //   ),
+                    // ),
                   ],
                 ),
               ],

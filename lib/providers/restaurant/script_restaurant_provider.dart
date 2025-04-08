@@ -3,7 +3,6 @@ import 'package:jejom/api/script_api.dart';
 import 'package:jejom/models/language_enum.dart';
 import 'package:jejom/models/script_game.dart';
 import 'package:jejom/models/script_restaurant.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class ScriptRestaurantProvider extends ChangeNotifier {
   List<ScriptGame> games = [];
@@ -15,7 +14,7 @@ class ScriptRestaurantProvider extends ChangeNotifier {
   Future<void> updateLanguage(Language newLang) async {
     // final prefs = await SharedPreferences.getInstance();
     // String? userId = prefs.getString('userId');
-    String? userId = '40872c7d-0e1e-4fde-a1e7-192f3b0ba95e';
+    String? userId = '27124a53-368f-434a-b3bc-38435524c7b9';
     lang = newLang;
 
     // Fetch games based on new language and wait for completion

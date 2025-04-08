@@ -229,7 +229,8 @@ class _MenuOCRPageState extends State<MenuOCRPage> {
       if (responseBody is Map<String, dynamic> &&
           responseBody.containsKey('candidates') &&
           responseBody['candidates'].isNotEmpty) {
-        final llmMessage = responseBody['candidates'][0]['content']['parts'][0]['text'];
+        final llmMessage =
+            responseBody['candidates'][0]['content']['parts'][0]['text'];
         setState(() {
           _messages.removeWhere((msg) => msg['content'] == 'Loading...');
           _messages.add({'role': 'system', 'content': llmMessage});
@@ -300,7 +301,8 @@ class _MenuOCRPageState extends State<MenuOCRPage> {
       if (responseBody is Map<String, dynamic> &&
           responseBody.containsKey('candidates') &&
           responseBody['candidates'].isNotEmpty) {
-        final translatedText = responseBody['candidates'][0]['content']['parts'][0]['text'];
+        final translatedText =
+            responseBody['candidates'][0]['content']['parts'][0]['text'];
 
         // Call the LLM API to format the translated text
         final formatMenuPrompt = '''
@@ -444,31 +446,73 @@ class _MenuOCRPageState extends State<MenuOCRPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.transparent,
-      body: SafeArea(
-        child: Stack(
-          children: [
-            Column(
+      backgroundColor: Colors.grey[200],
+      body: Stack(
+        children: [
+          Container(
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [
+                  Color(0xFFE0E6FF),
+                  Color(0xFFD5E6F3),
+                ],
+              ),
+            ),
+          ),
+
+          // Abstract design elements
+          Positioned(
+            top: -100,
+            right: -100,
+            child: Container(
+              height: 300,
+              width: 300,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: Colors.blue.withOpacity(0.1),
+              ),
+            ),
+          ),
+
+          Positioned(
+            bottom: -50,
+            left: -50,
+            child: Container(
+              height: 200,
+              width: 200,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: Colors.purple.withOpacity(0.1),
+              ),
+            ),
+          ),
+
+          SafeArea(
+            child: Stack(
               children: [
-                Align(
-                  alignment: Alignment.topLeft,
-                  child: Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: IconButton(
-                      visualDensity: VisualDensity.adaptivePlatformDensity,
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      icon: const Icon(
-                        Icons.arrow_back,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                ),
-                Expanded(
+                Padding(
+                  padding: const EdgeInsets.all(24),
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      GestureDetector(
+                        onTap: () => Navigator.of(context).pop(),
+                        child: Container(
+                          padding: const EdgeInsets.all(12),
+                          decoration: BoxDecoration(
+                            color: Colors.white.withOpacity(0.2),
+                            borderRadius: BorderRadius.circular(12),
+                            border: Border.all(
+                              color: Colors.white.withOpacity(0.2),
+                              width: 1.5,
+                            ),
+                          ),
+                          child: const Icon(Icons.arrow_back,
+                              color: Colors.black54),
+                        ),
+                      ),
                       Expanded(
                         child: SingleChildScrollView(
                           controller: _scrollController,
@@ -560,79 +604,76 @@ class _MenuOCRPageState extends State<MenuOCRPage> {
                           ),
                         ),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: TextField(
-                                controller: _textController,
-                                decoration: InputDecoration(
-                                  hintText: "Chat here",
-                                  prefixIcon: IconButton(
-                                    icon: const Icon(Icons.photo_camera),
-                                    color: Colors.white,
-                                    onPressed: _openModal,
-                                  ),
-                                  suffixIcon: IconButton(
-                                    icon: const Icon(Icons.send),
-                                    color: Colors.white,
-                                    onPressed: _handleSubmit,
-                                  ),
-                                  filled: true,
-                                  fillColor:
-                                      Theme.of(context).colorScheme.background,
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(16),
-                                    borderSide: BorderSide.none,
-                                  ),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: TextField(
+                              controller: _textController,
+                              decoration: InputDecoration(
+                                hintText: "Chat here",
+                                prefixIcon: IconButton(
+                                  icon: const Icon(Icons.photo_camera),
+                                  color: Colors.white,
+                                  onPressed: _openModal,
+                                ),
+                                suffixIcon: IconButton(
+                                  icon: const Icon(Icons.send),
+                                  color: Colors.white,
+                                  onPressed: _handleSubmit,
+                                ),
+                                filled: true,
+                                fillColor:
+                                    Theme.of(context).colorScheme.background,
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(16),
+                                  borderSide: BorderSide.none,
                                 ),
                               ),
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
                     ],
                   ),
                 ),
-              ],
-            ),
-            if (_showPrompt)
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const SizedBox(height: 80),
-                    Text("Menu & OCR",
-                        style: Theme.of(context).textTheme.headlineLarge),
-                    const SizedBox(height: 16),
-                    Text(
-                        "Translating food has never been so easy, start by taking a picture of the menu.",
-                        style: Theme.of(context).textTheme.bodyLarge),
-                    const SizedBox(height: 16),
-                    Row(
+                if (_showPrompt)
+                  Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        OutlinedButton.icon(
-                          onPressed: _openCamera,
-                          icon: const Icon(Icons.photo_camera),
-                          label: const Text('Camera'),
-                        ),
-                        const SizedBox(width: 16),
-                        OutlinedButton.icon(
-                          onPressed: _pickFromGallery,
-                          icon: const Icon(Icons.photo_library),
-                          label: const Text('Gallery'),
+                        const SizedBox(height: 80),
+                        Text("Menu & OCR",
+                            style: Theme.of(context).textTheme.headlineLarge),
+                        const SizedBox(height: 16),
+                        Text(
+                            "Translating food has never been so easy, start by taking a picture of the menu.",
+                            style: Theme.of(context).textTheme.bodyLarge),
+                        const SizedBox(height: 16),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            OutlinedButton.icon(
+                              onPressed: _openCamera,
+                              icon: const Icon(Icons.photo_camera),
+                              label: const Text('Camera'),
+                            ),
+                            const SizedBox(width: 16),
+                            OutlinedButton.icon(
+                              onPressed: _pickFromGallery,
+                              icon: const Icon(Icons.photo_library),
+                              label: const Text('Gallery'),
+                            ),
+                          ],
                         ),
                       ],
                     ),
-                  ],
-                ),
-              )
-          ],
-        ),
+                  )
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }

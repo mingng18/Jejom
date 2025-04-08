@@ -28,7 +28,8 @@ class RestaurantScriptGeneratorProvider extends ChangeNotifier {
     //   return;
     // }
 
-    String userId = "40872c7d-0e1e-4fde-a1e7-192f3b0ba95e";
+    String userId = "27124a53-368f-434a-b3bc-38435524c7b9";
+    print("Sending prompt to user: $userId");
 
     ScriptRestaurant? restaurant = await fetchRestaurantFromFirestore(userId);
     if (restaurant == null) {

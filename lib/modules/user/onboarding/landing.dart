@@ -25,7 +25,7 @@ class _LandingState extends State<Landing> {
           const SizedBox(height: 80),
           
           // Header text
-          Text(
+          const Text(
             "Looking for",
             style: TextStyle(
               fontSize: 32,
@@ -34,7 +34,7 @@ class _LandingState extends State<Landing> {
             ),
           ),
           
-          Text(
+          const Text(
             "New Trip",
             style: TextStyle(
               fontSize: 32,
@@ -45,7 +45,7 @@ class _LandingState extends State<Landing> {
           
           const SizedBox(height: 16),
           
-          Text(
+          const Text(
             "Let's plan your next trip with AI Powered Jejom. Let's register an account first!",
             style: TextStyle(
               fontSize: 16,
@@ -80,7 +80,8 @@ class _LandingState extends State<Landing> {
                         bottomLeft: Radius.circular(20),
                       ),
                       child: Image.network(
-                        "https://encrypted-tbn1.gstatic.com/licensed-image?q=tbn:ANd9GcTzE4_RYUCn-k0sb_wiO3sRCIvnxOq3b0U8pCgiWeMz5qxYyDbRxFmy0wmv-wE6fLXuB6rC4B1-j7u27attTsFDkIsmCSLs6Bb_PUl5L1w",
+                        "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/06/d7/dc/f6/bigphotofortaipei.jpg?w=1100&h=1100&s=1",
+                        // "https://encrypted-tbn1.gstatic.com/licensed-image?q=tbn:ANd9GcTzE4_RYUCn-k0sb_wiO3sRCIvnxOq3b0U8pCgiWeMz5qxYyDbRxFmy0wmv-wE6fLXuB6rC4B1-j7u27attTsFDkIsmCSLs6Bb_PUl5L1w",
                         width: 150,
                         height: 150,
                         fit: BoxFit.cover,
@@ -88,9 +89,9 @@ class _LandingState extends State<Landing> {
                     ),
                     
                     // Content section
-                    Expanded(
+                    const Expanded(
                       child: Padding(
-                        padding: const EdgeInsets.all(20),
+                        padding: EdgeInsets.all(20),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -104,10 +105,10 @@ class _LandingState extends State<Landing> {
                               ),
                             ),
                             
-                            const SizedBox(height: 8),
+                            SizedBox(height: 8),
                             
                             Text(
-                              "Jeju Island",
+                              "Taipei",
                               style: TextStyle(
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold,
@@ -149,11 +150,11 @@ class _LandingState extends State<Landing> {
                       width: 1.5,
                     ),
                   ),
-                  child: Row(
+                  child: const Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Icon(Icons.person_pin, color: Colors.black87),
-                      const SizedBox(width: 12),
+                      SizedBox(width: 12),
                       Text(
                         "Continue as Restaurant Owner",
                         style: TextStyle(
@@ -201,11 +202,11 @@ class _LandingState extends State<Landing> {
                     child: Container(
                       width: 56,
                       height: 56,
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                         color: Colors.black87,
                         shape: BoxShape.circle,
                       ),
-                      child: Icon(
+                      child: const Icon(
                         Icons.travel_explore,
                         size: 24,
                         color: Colors.white,
@@ -214,7 +215,7 @@ class _LandingState extends State<Landing> {
                   ),
                   activeThumbColor: Colors.black87,
                   activeTrackColor: Colors.transparent,
-                  child: Center(
+                  child: const Center(
                     child: Text(
                       "Swipe to Continue",
                       style: TextStyle(

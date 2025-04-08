@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating/flutter_rating.dart';
 import 'package:intl/intl.dart';
@@ -49,14 +48,19 @@ class _DestSectionState extends State<DestSection> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          destination.name,
-                          style: AppTheme.displaySmall.copyWith(
-                            fontWeight: FontWeight.bold,
+                        Expanded(
+                          child: Text(
+                            destination.name,
+                            style: AppTheme.displaySmall.copyWith(
+                              fontWeight: FontWeight.bold,
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 2,
                           ),
                         ),
-                        const Spacer(),
+                        const SizedBox(width: 8),
                         destination.destinationWebsiteUrl == ""
                             ? const SizedBox()
                             : Container(
@@ -115,111 +119,115 @@ class _DestSectionState extends State<DestSection> {
                         color: AppTheme.textDark.withOpacity(0.8),
                       ),
                       overflow: TextOverflow.ellipsis,
-                      maxLines: 2,
+                      maxLines: 3,
                     ),
                     const SizedBox(height: AppTheme.paddingMedium),
-                    Wrap(
-                      spacing: AppTheme.paddingSmall,
-                      runSpacing: AppTheme.paddingSmall,
-                      crossAxisAlignment: WrapCrossAlignment.start,
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: AppTheme.paddingSmall,
-                            vertical: 4,
-                          ),
-                          decoration: BoxDecoration(
-                            color: AppTheme.travelPrimary.withOpacity(0.2),
-                            borderRadius: BorderRadius.circular(
-                                AppTheme.borderRadiusSmall),
-                          ),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Text(
-                                destination.rating,
-                                style: AppTheme.labelMedium.copyWith(
+                    SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: AppTheme.paddingSmall,
+                              vertical: 4,
+                            ),
+                            decoration: BoxDecoration(
+                              color: AppTheme.travelPrimary.withOpacity(0.2),
+                              borderRadius: BorderRadius.circular(
+                                  AppTheme.borderRadiusSmall),
+                            ),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(
+                                  destination.rating,
+                                  style: AppTheme.labelMedium.copyWith(
+                                    color: AppTheme.travelPrimary,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                const SizedBox(width: 4),
+                                StarRating(
+                                  rating:
+                                      double.tryParse(destination.rating) ?? 0,
+                                  allowHalfRating: true,
+                                  starCount: 5,
+                                  size: 16,
                                   color: AppTheme.travelPrimary,
-                                  fontWeight: FontWeight.bold,
+                                  borderColor: AppTheme.travelPrimary,
                                 ),
-                              ),
-                              const SizedBox(width: 4),
-                              StarRating(
-                                rating:
-                                    double.tryParse(destination.rating) ?? 0,
-                                allowHalfRating: true,
-                                starCount: 5,
-                                size: 16,
-                                color: AppTheme.travelPrimary,
-                                borderColor: AppTheme.travelPrimary,
-                              ),
-                              const SizedBox(width: 4),
-                              Text(
-                                "(${destination.numRating})",
-                                style: AppTheme.labelSmall.copyWith(
-                                  color: AppTheme.textDark.withOpacity(0.8),
+                                const SizedBox(width: 4),
+                                Text(
+                                  "(${destination.numRating})",
+                                  style: AppTheme.labelSmall.copyWith(
+                                    color: AppTheme.textDark.withOpacity(0.8),
+                                  ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
-                        ),
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: AppTheme.paddingSmall,
-                            vertical: 4,
-                          ),
-                          decoration: BoxDecoration(
-                            color: Colors.white.withOpacity(0.2),
-                            borderRadius: BorderRadius.circular(
-                                AppTheme.borderRadiusSmall),
-                          ),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Icon(
-                                Icons.timer_rounded,
-                                color: AppTheme.textDark.withOpacity(0.7),
-                                size: 16,
-                              ),
-                              const SizedBox(width: 4),
-                              Text(
-                                getTodayOpeningHours(destination.openingHours),
-                                style: AppTheme.labelMedium.copyWith(
+                          const SizedBox(width: AppTheme.paddingSmall),
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: AppTheme.paddingSmall,
+                              vertical: 4,
+                            ),
+                            decoration: BoxDecoration(
+                              color: Colors.white.withOpacity(0.2),
+                              borderRadius: BorderRadius.circular(
+                                  AppTheme.borderRadiusSmall),
+                            ),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Icon(
+                                  Icons.timer_rounded,
                                   color: AppTheme.textDark.withOpacity(0.7),
+                                  size: 16,
                                 ),
-                              ),
-                            ],
+                                const SizedBox(width: 4),
+                                Text(
+                                  getTodayOpeningHours(destination.openingHours),
+                                  style: AppTheme.labelMedium.copyWith(
+                                    color: AppTheme.textDark.withOpacity(0.7),
+                                  ),
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ],
+                            ),
                           ),
-                        ),
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: AppTheme.paddingSmall,
-                            vertical: 4,
-                          ),
-                          decoration: BoxDecoration(
-                            color: Colors.white.withOpacity(0.2),
-                            borderRadius: BorderRadius.circular(
-                                AppTheme.borderRadiusSmall),
-                          ),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Icon(
-                                Icons.travel_explore_rounded,
-                                color: AppTheme.textDark.withOpacity(0.7),
-                                size: 16,
-                              ),
-                              const SizedBox(width: 4),
-                              Text(
-                                "Visit: ${destination.visitingTime.toTitleCase()}",
-                                style: AppTheme.labelMedium.copyWith(
+                          const SizedBox(width: AppTheme.paddingSmall),
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: AppTheme.paddingSmall,
+                              vertical: 4,
+                            ),
+                            decoration: BoxDecoration(
+                              color: Colors.white.withOpacity(0.2),
+                              borderRadius: BorderRadius.circular(
+                                  AppTheme.borderRadiusSmall),
+                            ),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Icon(
+                                  Icons.travel_explore_rounded,
                                   color: AppTheme.textDark.withOpacity(0.7),
+                                  size: 16,
                                 ),
-                              ),
-                            ],
+                                const SizedBox(width: 4),
+                                Text(
+                                  "Visit: ${destination.visitingTime.toTitleCase()}",
+                                  style: AppTheme.labelMedium.copyWith(
+                                    color: AppTheme.textDark.withOpacity(0.7),
+                                  ),
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ],
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                     if (destination.isMurderMysteryCafe) ...[
                       const SizedBox(height: AppTheme.paddingMedium),
@@ -241,6 +249,7 @@ class _DestSectionState extends State<DestSection> {
                                       fontWeight: FontWeight.bold,
                                       color: AppTheme.textDark,
                                     ),
+                                    overflow: TextOverflow.ellipsis,
                                   ),
                                   const SizedBox(height: 4),
                                   Text(
@@ -248,6 +257,7 @@ class _DestSectionState extends State<DestSection> {
                                     style: AppTheme.bodySmall.copyWith(
                                       color: AppTheme.textDark.withOpacity(0.7),
                                     ),
+                                    overflow: TextOverflow.ellipsis,
                                   ),
                                 ],
                               ),
