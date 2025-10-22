@@ -8,7 +8,6 @@ class User {
   final List<String> interests;
   final String name;
   final String desc;
-  final String residingCity;
 
   User({
     required this.userId,
@@ -18,7 +17,6 @@ class User {
     required this.interests,
     required this.name,
     required this.desc,
-    required this.residingCity,
   });
 
   factory User.fromJson(Map<String, dynamic> json) {
@@ -30,7 +28,6 @@ class User {
       interests: List<String>.from(json['interests']),
       name: json['name'] as String,
       desc: json['desc'] as String,
-      residingCity: json['residingCity'] as String,
     );
   }
 
@@ -43,7 +40,6 @@ class User {
       'interests': interests,
       'name': name,
       'desc': desc,
-      'residingCity': residingCity,
     };
   }
 
@@ -55,7 +51,6 @@ class User {
     List<String>? interests,
     String? name,
     String? desc,
-    String? residingCity,
   }) {
     return User(
       userId: userId ?? this.userId,
@@ -65,7 +60,6 @@ class User {
       interests: interests ?? this.interests,
       name: name ?? this.name,
       desc: desc ?? this.desc,
-      residingCity: residingCity ?? this.residingCity,
     );
   }
 }

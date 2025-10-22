@@ -29,14 +29,10 @@ Future<void> updateUserInFirestore(String userId,
     {String? dietary,
     List<String>? allergies,
     List<String>? interests,
-    String? residingCity,
     String? name,
     String? desc}) async {
   try {
-    final Map<String, dynamic> data = {
-      'user_id': userId,
-      'created_at': FieldValue.serverTimestamp(),
-    };
+    final Map<String, dynamic> data = {};
 
     if (dietary != null) {
       data['dietary'] = dietary;
@@ -47,9 +43,6 @@ Future<void> updateUserInFirestore(String userId,
     if (interests != null) {
       data['interests'] = interests;
     }
-    if (residingCity != null) {
-      data['residingCity'] = residingCity;
-    }
     if (name != null) {
       data['name'] = name;
     }
@@ -57,11 +50,10 @@ Future<void> updateUserInFirestore(String userId,
       data['desc'] = desc;
     }
 
-    // Use set with merge option to create the document if it doesn't exist
     await FirebaseFirestore.instance
         .collection('users')
         .doc(userId)
-        .set(data, SetOptions(merge: true));
+        .update(data);
   } catch (e) {
     // Handle the error appropriately
     print("Failed to update user in Firestore: $e");

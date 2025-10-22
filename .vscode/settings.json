@@ -1,6 +1,0 @@
-{
-    "java.compile.nullAnalysis.mode": "automatic",
-    "cmake.configureOnOpen": true,
-    "java.configuration.updateBuildConfiguration": "automatic",
-    "cmake.sourceDirectory": "C:/Users/mingng/Documents/GitHub/jejom/linux"
-}

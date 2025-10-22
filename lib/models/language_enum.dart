@@ -1,1 +1,1 @@
-enum Language { english, chinese }
+enum Language { english, korean }

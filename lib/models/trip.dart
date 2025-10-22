@@ -1,16 +1,15 @@
 import 'package:jejom/models/acccomodation.dart';
 import 'package:jejom/models/destination.dart';
-import 'package:jejom/models/flight_info.dart';
 
 class Trip {
+  // final String id;
   final String title;
   final String description;
   final String startDate;
   final String endDate;
+  // final List<Flight> flights;
   final List<Destination> destinations;
   final List<Accommodation> accommodations;
-  final FlightInfo flight;
-  final String thumbnail;
 
   Trip({
     required this.title,
@@ -19,8 +18,6 @@ class Trip {
     required this.endDate,
     required this.destinations,
     required this.accommodations,
-    required this.flight,
-    required this.thumbnail,
   });
 
   factory Trip.fromJson(Map<String, dynamic> json) {
@@ -37,11 +34,6 @@ class Trip {
           ? List<Accommodation>.from(
               json['accomodations'].map((x) => Accommodation.fromJson(x)))
           : [],
-      flight: json['flightInfo'] != null
-          ? FlightInfo.fromJson(json['flightInfo'])
-          : FlightInfo(
-              departureFlight: null, priceTotal: 0, returnFlight: null),
-      thumbnail: json['thumbnail'] ?? '',
     );
   }
 
@@ -53,8 +45,6 @@ class Trip {
       'endDate': endDate,
       'destinations': destinations.map((x) => x.toJson()).toList(),
       'accomodations': accommodations.map((x) => x.toJson()).toList(),
-      'flightInfo': flight.toJson(),
-      'thumbnail': thumbnail,
     };
   }
 
@@ -65,8 +55,6 @@ class Trip {
     String? endDate,
     List<Destination>? destinations,
     List<Accommodation>? accommodations,
-    FlightInfo? flight,
-    String? thumbnail,
   }) {
     return Trip(
       title: title ?? this.title,
@@ -75,8 +63,6 @@ class Trip {
       endDate: endDate ?? this.endDate,
       destinations: destinations ?? this.destinations,
       accommodations: accommodations ?? this.accommodations,
-      flight: flight ?? this.flight,
-      thumbnail: thumbnail ?? this.thumbnail,
     );
   }
 }
