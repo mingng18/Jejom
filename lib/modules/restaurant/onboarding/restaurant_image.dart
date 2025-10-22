@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:jejom/modules/restaurant/onboarding/restaurant_address.dart';
 import 'package:jejom/providers/restaurant/restaurant_onboarding_provider.dart';
-import 'package:jejom/utils/m3_carousel.dart';
 import 'package:provider/provider.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -75,7 +74,7 @@ class _RestaurantImageState extends State<RestaurantImage> {
               ),
             ),
           ),
-          
+
           // Abstract design elements
           Positioned(
             top: -100,
@@ -89,7 +88,7 @@ class _RestaurantImageState extends State<RestaurantImage> {
               ),
             ),
           ),
-          
+
           Positioned(
             bottom: -50,
             left: -50,
@@ -102,7 +101,7 @@ class _RestaurantImageState extends State<RestaurantImage> {
               ),
             ),
           ),
-          
+
           // Main content
           SafeArea(
             child: SingleChildScrollView(
@@ -129,7 +128,8 @@ class _RestaurantImageState extends State<RestaurantImage> {
                                 width: 1,
                               ),
                             ),
-                            child: const Icon(Icons.arrow_back, color: Colors.black54),
+                            child: const Icon(Icons.arrow_back,
+                                color: Colors.black54),
                           ),
                         ),
                       ],
@@ -152,7 +152,7 @@ class _RestaurantImageState extends State<RestaurantImage> {
                       ),
                     ),
                     const SizedBox(height: 30),
-                    
+
                     // Image upload section
                     GestureDetector(
                       onTap: _pickImages,
@@ -191,90 +191,96 @@ class _RestaurantImageState extends State<RestaurantImage> {
                                       ),
                                     ],
                                   )
-                                : ClipRRect(
-                                    borderRadius: BorderRadius.circular(20),
-                                    child: M3Carousel(
-                                      isLocal: true,
-                                      visible: _images.length,
-                                      slideAnimationDuration: 300,
-                                      titleFadeAnimationDuration: 200,
-                                      children: [
-                                        ..._images.map((img) {
-                                          return {"image": img.path, "title": ""};
-                                        }),
-                                      ],
-                                    ),
+                                : CarouselView(
+                                    itemExtent: 280,
+                                    shrinkExtent: 240,
+                                    children: _images.map((img) {
+                                      return ClipRRect(
+                                        borderRadius: BorderRadius.circular(20),
+                                        child: Image.file(
+                                          File(img.path),
+                                          fit: BoxFit.cover,
+                                          width: double.infinity,
+                                          height: 280,
+                                        ),
+                                      );
+                                    }).toList(),
                                   ),
                           ),
                         ),
                       ),
                     ),
-                    
+
                     const SizedBox(height: 40),
-                    
+
                     // Next Button
                     Center(
                       child: GestureDetector(
                         onTap: _isLoading
-                          ? null
-                          : () async {
-                              if (_images.isNotEmpty) {
-                                setState(() {
-                                  _isLoading = true;
-                                });
-                                List<String> uploadedUrls = await _uploadImages();
-                                onBoardingProvider.setImages(uploadedUrls);
-
-                                if (mounted) {
+                            ? null
+                            : () async {
+                                if (_images.isNotEmpty) {
                                   setState(() {
-                                    _isLoading = false;
+                                    _isLoading = true;
                                   });
-                                  
-                                  Navigator.of(context).push(
-                                    MaterialPageRoute(
-                                      builder: (context) => const RestaurantAddress(),
-                                    ),
-                                  );
+                                  List<String> uploadedUrls =
+                                      await _uploadImages();
+                                  onBoardingProvider.setImages(uploadedUrls);
+
+                                  if (mounted) {
+                                    setState(() {
+                                      _isLoading = false;
+                                    });
+
+                                    Navigator.of(context).push(
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            const RestaurantAddress(),
+                                      ),
+                                    );
+                                  }
                                 }
-                              }
-                            },
+                              },
                         child: Container(
-                          padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 60),
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 16, horizontal: 60),
                           decoration: BoxDecoration(
                             color: _isLoading ? Colors.grey : Colors.black87,
                             borderRadius: BorderRadius.circular(30),
                           ),
                           child: _isLoading
-                            ? Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  SizedBox(
-                                    width: 16,
-                                    height: 16,
-                                    child: CircularProgressIndicator(
-                                      strokeWidth: 2,
-                                      valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                              ? Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    SizedBox(
+                                      width: 16,
+                                      height: 16,
+                                      child: CircularProgressIndicator(
+                                        strokeWidth: 2,
+                                        valueColor:
+                                            AlwaysStoppedAnimation<Color>(
+                                                Colors.white),
+                                      ),
                                     ),
-                                  ),
-                                  const SizedBox(width: 10),
-                                  Text(
-                                    "Uploading...",
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w500,
+                                    const SizedBox(width: 10),
+                                    Text(
+                                      "Uploading...",
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w500,
+                                      ),
                                     ),
+                                  ],
+                                )
+                              : Text(
+                                  "Next",
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w500,
                                   ),
-                                ],
-                              )
-                            : Text(
-                                "Next",
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w500,
                                 ),
-                              ),
                         ),
                       ),
                     ),

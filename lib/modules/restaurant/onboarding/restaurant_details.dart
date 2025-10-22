@@ -116,7 +116,7 @@ class _RestaurantDetailsState extends State<RestaurantDetails> {
                     buildInputLabel("Restaurant Name"),
                     const SizedBox(height: 8),
                     buildGlassmorphicTextField(
-                      hintText: "The Best Jeju Cafe",
+                      hintText: "The Most Delicious Cafe",
                       prefixIcon: Icons.restaurant,
                       onChanged: (value) => onBoardingProvider.setName(value),
                     ),

@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:easy_date_timeline/easy_date_timeline.dart';
 import 'package:flutter/material.dart';
 import 'package:jejom/models/trip.dart';
