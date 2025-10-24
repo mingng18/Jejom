@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:jejom/models/interest_destination.dart';
 import 'package:jejom/utils/constants/curve.dart';
-import 'package:jejom/utils/glass_container.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:jejom/providers/user/interest_provider.dart';

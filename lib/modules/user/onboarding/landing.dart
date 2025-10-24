@@ -17,13 +17,18 @@ class _LandingState extends State<Landing> {
   Widget build(BuildContext context) {
     final onboardingProvider = Provider.of<OnboardingProvider>(context);
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 24.0),
-      child: Column(
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: () {
+        FocusScope.of(context).unfocus();
+      },
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 24.0),
+        child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const SizedBox(height: 80),
-          
+
           // Header text
           const Text(
             "Looking for",
@@ -33,7 +38,7 @@ class _LandingState extends State<Landing> {
               color: Colors.black87,
             ),
           ),
-          
+
           const Text(
             "New Trip",
             style: TextStyle(
@@ -42,20 +47,16 @@ class _LandingState extends State<Landing> {
               color: Colors.black87,
             ),
           ),
-          
+
           const SizedBox(height: 16),
-          
+
           const Text(
-            "Let's plan your next trip with AI Powered Jejom. Let's register an account first!",
-            style: TextStyle(
-              fontSize: 16,
-              color: Colors.black54,
-              height: 1.5,
-            ),
+            "Let's plan your next trip with AI Powered Jejom.",
+            style: TextStyle(fontSize: 16, color: Colors.black54, height: 1.5),
           ),
-          
+
           const SizedBox(height: 32),
-          
+
           // Destination card
           ClipRRect(
             borderRadius: BorderRadius.circular(20),
@@ -63,10 +64,10 @@ class _LandingState extends State<Landing> {
               filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
               child: Container(
                 decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.15),
+                  color: Colors.white.withValues(alpha: .15),
                   borderRadius: BorderRadius.circular(20),
                   border: Border.all(
-                    color: Colors.white.withOpacity(0.2),
+                    color: Colors.white.withValues(alpha: .2),
                     width: 1.5,
                   ),
                 ),
@@ -87,7 +88,7 @@ class _LandingState extends State<Landing> {
                         fit: BoxFit.cover,
                       ),
                     ),
-                    
+
                     // Content section
                     const Expanded(
                       child: Padding(
@@ -104,9 +105,9 @@ class _LandingState extends State<Landing> {
                                 color: Colors.black54,
                               ),
                             ),
-                            
+
                             SizedBox(height: 8),
-                            
+
                             Text(
                               "Taipei",
                               style: TextStyle(
@@ -124,9 +125,9 @@ class _LandingState extends State<Landing> {
               ),
             ),
           ),
-          
+
           const Spacer(),
-          
+
           // Restaurant owner button
           GestureDetector(
             onTap: () {
@@ -141,12 +142,15 @@ class _LandingState extends State<Landing> {
               child: BackdropFilter(
                 filter: ImageFilter.blur(sigmaX: 8, sigmaY: 8),
                 child: Container(
-                  padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 16,
+                    horizontal: 24,
+                  ),
                   decoration: BoxDecoration(
-                    color: Colors.black.withOpacity(0.1),
+                    color: Colors.black.withValues(alpha: .1),
                     borderRadius: BorderRadius.circular(16),
                     border: Border.all(
-                      color: Colors.white.withOpacity(0.2),
+                      color: Colors.white.withValues(alpha: .2),
                       width: 1.5,
                     ),
                   ),
@@ -169,9 +173,9 @@ class _LandingState extends State<Landing> {
               ),
             ),
           ),
-          
+
           const SizedBox(height: 24),
-          
+
           // Swipe button
           ClipRRect(
             borderRadius: BorderRadius.circular(64),
@@ -185,13 +189,13 @@ class _LandingState extends State<Landing> {
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                     colors: [
-                      Colors.white.withOpacity(0.2),
-                      Colors.white.withOpacity(0.1),
+                      Colors.white.withValues(alpha: .2),
+                      Colors.white.withValues(alpha: .1),
                     ],
                   ),
                   borderRadius: BorderRadius.circular(64),
                   border: Border.all(
-                    color: Colors.white.withOpacity(0.2),
+                    color: Colors.white.withValues(alpha: .2),
                     width: 1.5,
                   ),
                 ),
@@ -230,9 +234,10 @@ class _LandingState extends State<Landing> {
               ),
             ),
           ),
-          
+
           const SizedBox(height: 32),
         ],
+      ),
       ),
     );
   }
